@@ -155,3 +155,7 @@ exports.updateUser = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.protected = async (req, res) => {
+  res.json({ msg: "You have access to this protected route" });
+};
