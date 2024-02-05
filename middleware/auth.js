@@ -3,7 +3,6 @@ require("dotenv").config();
 
 function authMiddleware(req, res, next) {
   const token = req.header("token");
-  console.log(token);
 
   if (!token) {
     return res.status(401).json({ msg: "No token, authorization denied" });

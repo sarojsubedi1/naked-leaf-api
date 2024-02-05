@@ -13,6 +13,10 @@ const productSchema = new mongoose.Schema(
     richDec: {
       type: String,
     },
+    featured: {
+      type: Boolean,
+      default: false,
+    },
     image: {
       type: String,
       default: "",
