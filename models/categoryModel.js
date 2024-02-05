@@ -5,6 +5,10 @@ const catagorySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  icon: {
+    type: String,
+    default: "",
+  },
 });
 
 const Catogory = mongoose.model("Category", catagorySchema);

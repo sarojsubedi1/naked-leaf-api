@@ -1,5 +1,7 @@
 const Category = require("../models/categoryModel.js");
 
+const { uploadToCloud } = require("../utils/cloudinary.js");
+
 // Create New Category
 exports.addcategory = async (req, res) => {
   const { name } = req.body;
@@ -52,5 +54,39 @@ exports.getCategoryWithId = async (req, res) => {
     res.status(200).json(category);
   } catch (error) {
     res.json({ message: "Error retrieving category", error });
+  }
+};
+//Update Category by id
+exports.updateCategoryWithId = async (req, res) => {
+  const categoryId = req.params.categoryId;
+  try {
+    const category = await Category.findById(categoryId);
+
+    if (!category) {
+      return res
+        .status(404)
+        .json({ message: `Category with id ${categoryId} not found` });
+    }
+    if (req.file) {
+      const { mimetype, buffer } = req.file;
+      const base64 = buffer.toString("base64");
+
+      const result = await uploadToCloud(`data:${mimetype};base64,${base64}`, {
+        folder: "category/",
+      });
+      category.icon = result.secure_url;
+    }
+
+    if (req.body.username) {
+      category.name = req.body.name;
+    }
+
+    await category.save();
+
+    res
+      .status(200)
+      .json({ message: "Category updated successfully", category });
+  } catch (error) {
+    res.json({ message: "Error updating category", error });
   }
 };
