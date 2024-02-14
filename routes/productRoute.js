@@ -17,7 +17,16 @@ router.post(
 );
 
 router.get("/", productController.getAllProduct);
+
 router.get("/:productId", productController.getProduct);
+
+router.put(
+  "/:productId",
+  upload.single("image"),
+  authMiddleware,
+  productController.editProduct,
+);
+
 router.delete("/:productId", authMiddleware, productController.deleteProduct);
 
 module.exports = router;

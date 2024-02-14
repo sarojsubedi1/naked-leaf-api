@@ -6,8 +6,6 @@ const userController = require("../controllers/userController");
 
 const router = express.Router();
 
-router.get("/ffff", authMiddleware, userController.protected);
-
 router.post("/", userController.createUser);
 
 router.post("/auth", userController.authUser);

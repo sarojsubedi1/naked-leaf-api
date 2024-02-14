@@ -5,6 +5,7 @@ const {
   deleteProductFromCloud,
 } = require("../utils/cloudinary.js");
 
+// Add product
 exports.addProduct = async (req, res) => {
   const productData = req.body;
 
@@ -71,7 +72,7 @@ exports.getProduct = async (req, res) => {
     }
     res.status(404).json({ message: "Product  not found" });
   } catch (error) {
-    res.json({ message: "Error retrieving user", error });
+    res.json({ message: "Error retrieving Product", error });
   }
 };
 
@@ -103,5 +104,58 @@ exports.deleteProduct = async (req, res) => {
   } catch (error) {
     console.error("Error deleting product:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// edit Product
+exports.editProduct = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    if (req.file) {
+      const { mimetype, buffer } = req.file;
+      const base64 = buffer.toString("base64");
+
+      const result = await uploadToCloud(`data:${mimetype};base64,${base64}`, {
+        folder: `products/${product.title}`,
+      });
+      product.image = result.secure_url;
+    }
+
+    if (req.body.title) {
+      product.title = req.body.title;
+    }
+
+    if (req.body.featured) {
+      product.featured = req.body.featured;
+    }
+
+    if (req.body.dec) {
+      product.dec = req.body.dec;
+    }
+
+    if (req.body.price) {
+      product.price = req.body.price;
+    }
+
+    if (req.body.category) {
+      product.category = req.body.category;
+    }
+
+    if (req.body.countInStock) {
+      product.countInStock = req.body.countInStock;
+    }
+
+    await product.save();
+
+    res.status(200).json({ message: "Product updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
