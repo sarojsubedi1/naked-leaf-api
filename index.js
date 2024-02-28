@@ -5,6 +5,7 @@ const connectDB = require("./utils/connectDB.js");
 const userRoutes = require("./routes/userRoutes.js");
 const categoryRoutes = require("./routes/categoryRoute.js");
 const productRoutes = require("./routes/productRoute.js");
+const cartRoutes = require("./routes/cartRoutes.js");
 
 const cors = require("cors");
 require("dotenv").config();
@@ -20,6 +21,7 @@ connectDB();
 app.use("/api/users", userRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);

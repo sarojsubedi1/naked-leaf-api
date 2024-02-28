@@ -1,5 +1,5 @@
 const express = require("express");
-const authMiddleware = require("../middleware/auth.js");
+const authorization = require("../middleware/authorization.js");
 
 const upload = require("../middleware/upload.js");
 const productController = require("../controllers/productController.js");
@@ -12,7 +12,7 @@ router.post(
     { name: "image", maxCount: 1 },
     { name: "images", maxCount: 3 },
   ]),
-  authMiddleware,
+  authorization,
   productController.addProduct,
 );
 
@@ -23,10 +23,10 @@ router.get("/:productId", productController.getProduct);
 router.put(
   "/:productId",
   upload.single("image"),
-  authMiddleware,
+  authorization,
   productController.editProduct,
 );
 
-router.delete("/:productId", authMiddleware, productController.deleteProduct);
+router.delete("/:productId", authorization, productController.deleteProduct);
 
 module.exports = router;

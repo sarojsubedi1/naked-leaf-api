@@ -1,5 +1,5 @@
 const express = require("express");
-const authMiddleware = require("../middleware/auth.js");
+const authorization = require("../middleware/authorization.js");
 
 const upload = require("../middleware/upload.js");
 
@@ -11,11 +11,11 @@ router.get("/", categoryController.getallcategory);
 
 router.get("/:categoryId", categoryController.getCategoryWithId);
 
-router.post("/", authMiddleware, categoryController.addcategory);
+router.post("/", authorization, categoryController.addcategory);
 
 router.put(
   "/:categoryId",
-  authMiddleware,
+  authorization,
   upload.single("icon"),
   categoryController.updateCategoryWithId,
 );

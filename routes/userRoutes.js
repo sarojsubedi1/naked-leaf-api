@@ -1,5 +1,5 @@
 const express = require("express");
-const authMiddleware = require("../middleware/auth.js");
+const authorization = require("../middleware/authorization.js");
 
 const upload = require("../middleware/upload.js");
 const userController = require("../controllers/userController");
@@ -10,11 +10,11 @@ router.post("/", userController.createUser);
 
 router.post("/auth", userController.authUser);
 
-router.get("/all", authMiddleware, userController.getAllUser);
+router.get("/all", authorization, userController.getAllUser);
 
 router.get("/:userId", userController.getUser);
 
-router.delete("/:userId", authMiddleware, userController.deleteUser);
+router.delete("/:userId", authorization, userController.deleteUser);
 
 router.put("/:userId", upload.single("profile"), userController.updateUser);
 
