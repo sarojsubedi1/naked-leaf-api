@@ -19,6 +19,20 @@ const cartSchema = new mongoose.Schema({
       },
     },
   ],
+  total: {
+    type: Number,
+    default: 0,
+  },
+});
+
+cartSchema.pre("save", async function (next) {
+  await this.populate("items.product");
+  let total = 0;
+  for (let item of this.items) {
+    total += item.product.price * item.cartQty;
+  }
+  this.total = total;
+  next();
 });
 
 const Cart = mongoose.model("Cart", cartSchema);
